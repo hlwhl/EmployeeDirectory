@@ -33,12 +33,13 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
 
                     startActivity(new Intent(SplashActivity.this,LoginActivity.class));
+                finish();
 
             }
         };
-        time.schedule(task,SKIP_DELAY_TIME);
+        time.schedule(task, SKIP_DELAY_TIME);
 
-        finish();
+
     }
 
 }

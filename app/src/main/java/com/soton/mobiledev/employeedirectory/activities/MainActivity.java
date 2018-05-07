@@ -1,5 +1,8 @@
 package com.soton.mobiledev.employeedirectory.activities;
 
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -7,16 +10,32 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
+import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.soton.mobiledev.employeedirectory.R;
+import com.soton.mobiledev.employeedirectory.entities.User;
+import com.soton.mobiledev.employeedirectory.utilities.File;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MaterialSearchBar.OnSearchActionListener {
     private ViewPager MyPager;
     private List<Fragment> fragmentList;
     private TabLayout mTab;
+    private ImageView iv_user;
+    MaterialSearchBar searchBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +48,41 @@ public class MainActivity extends AppCompatActivity {
         fragmentList.add(new FragmentThree());
         initView();
 
+
+        JSONObject photoFile = (JSONObject) User.getObjectByKey("Photo");
+        String photoUrl = null;
+        try {
+            photoUrl = photoFile.getString("url");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Glide.with(getApplicationContext()).load(photoUrl).into(iv_user);
+
+
         MyPager.setAdapter(new MyViewPagerAdapter(getSupportFragmentManager(),fragmentList));
         mTab.setupWithViewPager(MyPager);
+
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return false;
+    }
+
+    @Override
+    public void onSearchStateChanged(boolean enabled) {
+
+    }
+
+    @Override
+    public void onSearchConfirmed(CharSequence text) {
+        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+        intent.putExtra("search", text.toString());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onButtonClicked(int buttonCode) {
 
     }
 
@@ -62,6 +114,9 @@ public class MainActivity extends AppCompatActivity {
     private void initView(){
         MyPager=(ViewPager) findViewById(R.id.viewpager);
         mTab=(TabLayout) findViewById(R.id.tab);
+        iv_user = (ImageView) findViewById(R.id.bgimagemainuser);
+        searchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
+        searchBar.setOnSearchActionListener(this);
     }
 
 }

@@ -4,12 +4,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -32,34 +34,46 @@ public class FragmentOne extends Fragment{
     private List<Employee> employeeList=new ArrayList<>();
     private View view;
     private RecyclerView recyclerView;
+    private EmployeeAdapter adapter;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view= LayoutInflater.from(getContext()).inflate(R.layout.fragment_one,null);
         //initEmployee();
-        query();
+        if (employeeList.size() == 0) {
+            query();
+        }
+        adapter = new EmployeeAdapter(employeeList);
         recyclerView=(RecyclerView) view.findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager=new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         return view;
     }
 
     //在这里传入后端云获的employee信息
 
-
+    //查询函数
     private void query(){
-        BmobQuery<BmobUser> query=new BmobQuery<BmobUser>();
+        BmobQuery<User> query = new BmobQuery<User>();
+        query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ONLY);
         query.addWhereEqualTo("Department","Software");
-        query.findObjects(new FindListener<BmobUser>() {
+        query.findObjects(new FindListener<User>() {
             @Override
-            public void done(List<BmobUser> list, BmobException e) {
-                Log.e("query","查询完成"+list.size());
-                for(BmobUser u:list){
-                    employeeList.add(new Employee(u.getUsername(),R.drawable.m));
+            public void done(List<User> list, BmobException e) {
+                for (User u : list) {
+                    if (u.getIsManager()) {
+                        employeeList.add(new Employee(u.getUsername(), R.drawable.m, u.getEmail(), u.getPhoto(), u.getMobilePhoneNumber()));
+                    } else {
+                        employeeList.add(new Employee(u.getUsername(), R.drawable.e, u.getEmail(), u.getPhoto(), u.getMobilePhoneNumber()));
+                    }
+                    adapter = new EmployeeAdapter(employeeList);
+                    recyclerView.setAdapter(adapter);
                 }
-                EmployeeAdapter adapter=new EmployeeAdapter(employeeList);
-                recyclerView.setAdapter(adapter);
             }
         });
     }
+
+
 }

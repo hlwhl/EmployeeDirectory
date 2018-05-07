@@ -10,9 +10,10 @@ import android.widget.TextView;
 import android.widget.ImageView;
 
 import com.soton.mobiledev.employeedirectory.R;
-import com.soton.mobiledev.employeedirectory.activities.Main2Activity;
+import com.soton.mobiledev.employeedirectory.activities.PersonDetailActivity;
 import com.soton.mobiledev.employeedirectory.entities.Employee;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHolder> {
@@ -41,7 +42,9 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
                 Employee employee = mEmployeeList.get(position);
-                Intent intent=new Intent(parent.getContext(),Main2Activity.class);
+                Intent intent = new Intent(parent.getContext(), PersonDetailActivity.class);
+                //intent传递数据
+                intent.putExtra("detail", (Serializable) employee);
                 parent.getContext().startActivity(intent);
             }
         });

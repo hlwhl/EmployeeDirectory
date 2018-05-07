@@ -3,6 +3,6 @@
     <string-array name="departments_name">
     <item>Software</item>
     <item>Hardware</item>
-    <item>department3</item>
+        <item>Testing</item>
     </string-array>
 </resources>

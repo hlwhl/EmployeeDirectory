@@ -58,12 +58,16 @@ public class FragmentTwo extends Fragment {
                 for (User u : list) {
                     if (u.getIsManager()) {
                         employeeList.add(new Employee(u.getUsername(), R.drawable.m, u.getEmail(), u.getPhoto(), u.getMobilePhoneNumber()));
-                    } else {
+                    }
+                }
+                for (User u : list) {
+                    if (!u.getIsManager()) {
                         employeeList.add(new Employee(u.getUsername(), R.drawable.e, u.getEmail(), u.getPhoto(), u.getMobilePhoneNumber()));
                     }
-                    adapter = new EmployeeAdapter(employeeList);
-                    recyclerView.setAdapter(adapter);
                 }
+                adapter = new EmployeeAdapter(employeeList);
+                recyclerView.setAdapter(adapter);
+
             }
         });
     }

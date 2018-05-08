@@ -2,6 +2,7 @@ package com.soton.mobiledev.employeedirectory.activities;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -12,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TabLayout mTab;
     private ImageView iv_user;
     MaterialSearchBar searchBar;
-
+    FloatingActionButton addButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentList.add(new FragmentThree());
         initView();
 
-
         JSONObject photoFile = (JSONObject) User.getObjectByKey("Photo");
         String photoUrl = null;
         try {
@@ -58,10 +59,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         Glide.with(getApplicationContext()).load(photoUrl).into(iv_user);
 
-
         MyPager.setAdapter(new MyViewPagerAdapter(getSupportFragmentManager(),fragmentList));
         mTab.setupWithViewPager(MyPager);
-
+        addButton = (FloatingActionButton) findViewById(R.id.add_employee);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AddEmployee.class);
+                startActivity(intent);
+                // Toast.makeText(getApplicationContext(), "No Result", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
@@ -85,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onButtonClicked(int buttonCode) {
 
     }
+
 
     public class MyViewPagerAdapter extends FragmentPagerAdapter {
         List<Fragment> list;
@@ -117,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         iv_user = (ImageView) findViewById(R.id.bgimagemainuser);
         searchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
         searchBar.setOnSearchActionListener(this);
+
     }
 
 }

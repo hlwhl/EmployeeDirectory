@@ -38,6 +38,7 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         String search = getIntent().getStringExtra("search");
 
+
         if (getActionBar() != null) {
             getActionBar().setTitle("Search Result");
         }
@@ -53,24 +54,24 @@ public class SearchActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
-    private void query(String search) {
+    private void query(final String search) {
         //Toast.makeText(getApplicationContext(),search,Toast.LENGTH_LONG).show();
         BmobQuery<User> query = new BmobQuery<User>();
-        query.addWhereEqualTo("username", search);
+        //  query.addWhereEqualTo("username", search);
+        //先查所有的,在结果里根据名字判断
         query.findObjects(new FindListener<User>() {
             @Override
             public void done(List<User> list, BmobException e) {
-                if (e == null) {
-                    if (list.size() == 0) {
-                        Toast.makeText(getApplicationContext(), "No Result", Toast.LENGTH_LONG).show();
-                        finish();
-                    }
-                    //Toast.makeText(getApplicationContext(),"query succeful"+list.size(),Toast.LENGTH_LONG).show();
                     for (User u : list) {
-                        resultList.add(new Employee(u.getUsername(), R.drawable.m, u.getEmail(), u.getPhoto(), u.getMobilePhoneNumber()));
+                        if (u.getUsername().contains(search)) {
+                            resultList.add(new Employee(u.getUsername(), R.drawable.m, u.getEmail(), u.getPhoto(), u.getMobilePhoneNumber()));
+                        }
+                    }
                         adapter = new EmployeeAdapter(resultList);
                         recyclerView.setAdapter(adapter);
-                    }
+                if (resultList.size() == 0) {
+                    Toast.makeText(getApplicationContext(), "No Result", Toast.LENGTH_LONG).show();
+                    finish();
                 }
             }
         });

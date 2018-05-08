@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/colorPrimary">
+    android:background="@color/white">
 
     <LinearLayout
         android:orientation="vertical"
@@ -18,6 +19,7 @@
             android:layout_height="72dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="24dp"
+            android:tint="	#9370DB"
             android:scaleType="centerCrop"
             android:src="@drawable/logo" />
 
@@ -34,6 +36,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:hint="User Name" />
+
         </android.support.design.widget.TextInputLayout>
 
         <!--  Password Label -->

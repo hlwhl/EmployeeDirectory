@@ -37,8 +37,9 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:background="@mipmap/ic_bg"
                     android:id="@+id/bgimagemainuser"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
                     app:layout_scrollFlags="scroll|enterAlways" />
                 />
 
@@ -49,7 +50,10 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginBottom="13dp"
-                    android:src="@android:drawable/ic_menu_edit" />
+                    android:id="@+id/add_employee"
+                    android:src="@android:drawable/ic_input_add"
+                    android:tint="@color/colorPrimary"
+                    android:backgroundTint="@color/white" />
             </RelativeLayout>
 
 

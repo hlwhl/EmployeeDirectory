@@ -1,13 +1,16 @@
 package com.soton.mobiledev.employeedirectory.activities;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -32,6 +35,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.io.File;
@@ -39,6 +44,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import com.soton.mobiledev.employeedirectory.R;
+import com.soton.mobiledev.employeedirectory.entities.User;
+
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UploadFileListener;
 
 public class AddEmployee extends AppCompatActivity {
     public static final int TAKE_PHOTO = 1;
@@ -47,16 +59,88 @@ public class AddEmployee extends AppCompatActivity {
 
     public String imagePath = null;
 
+    private EditText etUsername;
+    private EditText etPassword;
+    private EditText etEmail;
+    private EditText etAddress;
+    private RadioGroup rgRole;
+    private RadioGroup rgDepartment;
+    private AppCompatButton add;
+    private ProgressDialog pd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addemployee);
         ImageButton chooseFromAlbum = (ImageButton) findViewById(R.id.selectPhoto);
-        AppCompatButton add = (AppCompatButton) findViewById(R.id.btn_add);
+
+        initview();
+
+        add = (AppCompatButton) findViewById(R.id.btn_add);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), imagePath, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), imagePath, Toast.LENGTH_LONG).show();
+                //向服务器更新(添加)数据
+                if (isnull()) {
+                    Snackbar.make(getCurrentFocus(), "Please complete the user information", Snackbar.LENGTH_LONG).show();
+                } else {
+                    pd = new ProgressDialog(AddEmployee.this);
+                    pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                    pd.setTitle("Uploading...");
+                    pd.show();
+                    add.setEnabled(false);
+                    final User newUser = new User();
+                    newUser.setUsername(etUsername.getText().toString());
+                    newUser.setPassword(etPassword.getText().toString());
+                    newUser.setEmail(etEmail.getText().toString());
+                    newUser.setAddress(etAddress.getText().toString());
+                    //处理照片上传
+                    final BmobFile photo = new BmobFile(new File(imagePath));
+                    photo.uploadblock(new UploadFileListener() {
+                        @Override
+                        public void onProgress(Integer value) {
+                            super.onProgress(value);
+                            pd.setProgress(value);
+                        }
+
+                        @Override
+                        public void done(BmobException e) {
+                            if (e == null) {
+                                Toast.makeText(getApplicationContext(), "Upload Succeed", Toast.LENGTH_LONG).show();
+                                newUser.setPhoto(photo);
+                                if (rgDepartment.getCheckedRadioButtonId() == R.id.btn1) {
+                                    newUser.setDepartment("Software");
+                                } else if (rgDepartment.getCheckedRadioButtonId() == R.id.btn2) {
+                                    newUser.setDepartment("Hardware");
+                                } else if (rgDepartment.getCheckedRadioButtonId() == R.id.btn3) {
+                                    newUser.setDepartment("Testing");
+                                }
+
+                                if (rgRole.getCheckedRadioButtonId() == R.id.role_manager) {
+                                    newUser.setIsManager(true);
+                                } else if (rgRole.getCheckedRadioButtonId() == R.id.role_employee) {
+                                    newUser.setIsManager(false);
+                                }
+                                newUser.signUp(new SaveListener<User>() {
+                                    @Override
+                                    public void done(User u, BmobException e) {
+                                        if (e == null) {
+                                            Toast.makeText(getApplicationContext(), "Add new employee succeed", Toast.LENGTH_LONG).show();
+                                            pd.dismiss();
+                                            finish();
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), e.getMessage() + "Try Again", Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
+                            } else {
+                                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+
+                }
             }
         });
         chooseFromAlbum.setOnClickListener(new View.OnClickListener() {
@@ -69,6 +153,11 @@ public class AddEmployee extends AppCompatActivity {
                 }
             }
         });
+    }
+
+
+    private boolean isnull() {
+        return (etUsername.length() == 0) || (etPassword.length() == 0) || (etAddress.length() == 0) || (etEmail.length() == 0) || rgRole.getCheckedRadioButtonId() == -1 || rgDepartment.getCheckedRadioButtonId() == -1 || imagePath == null;
     }
 
     private void openAlbum() {
@@ -155,6 +244,17 @@ public class AddEmployee extends AppCompatActivity {
             cursor.close();
         }
         return path;
+    }
+
+
+    private void initview() {
+        etUsername = (EditText) findViewById(R.id.input_username);
+        etPassword = (EditText) findViewById(R.id.input_password);
+        etEmail = (EditText) findViewById(R.id.input_email);
+        etAddress = (EditText) findViewById(R.id.input_location);
+        rgRole = (RadioGroup) findViewById(R.id.rgRole);
+        rgDepartment = (RadioGroup) findViewById(R.id.rgDepartment);
+
     }
 
 }

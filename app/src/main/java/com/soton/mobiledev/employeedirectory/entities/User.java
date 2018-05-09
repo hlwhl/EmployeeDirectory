@@ -7,6 +7,8 @@ import cn.bmob.v3.datatype.BmobFile;
 public class User extends BmobUser {
     private BmobFile Photo;
     private Boolean isManager;
+    private String address;
+    private String Department;
 
     public void setPhoto(BmobFile photo) {
         Photo = photo;
@@ -22,5 +24,21 @@ public class User extends BmobUser {
 
     public Boolean getIsManager() {
         return isManager;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setDepartment(String department) {
+        Department = department;
+    }
+
+    public String getDepartment() {
+        return Department;
     }
 }

@@ -37,7 +37,7 @@ public class FragmentTwo extends Fragment {
             query();
         }
         adapter = new EmployeeAdapter(employeeList);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view2);
+        recyclerView = view.findViewById(R.id.recycler_view2);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -51,10 +51,11 @@ public class FragmentTwo extends Fragment {
     private void query() {
         BmobQuery<User> query = new BmobQuery<User>();
         query.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ONLY);
-        query.addWhereEqualTo("Department", "Hardware");
+        query.addWhereEqualTo("Department", "Software");
         query.findObjects(new FindListener<User>() {
             @Override
             public void done(List<User> list, BmobException e) {
+                employeeList.clear();
                 for (User u : list) {
                     if (u.getIsManager()) {
                         employeeList.add(new Employee(u.getUsername(), R.drawable.m, u.getEmail(), u.getPhoto(), u.getMobilePhoneNumber()));
@@ -70,6 +71,14 @@ public class FragmentTwo extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        recyclerView.swapAdapter(adapter, true);
+        employeeList.clear();
+        query();
     }
 
 

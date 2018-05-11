@@ -62,18 +62,26 @@ public class FragmentOne extends Fragment{
         query.findObjects(new FindListener<User>() {
             @Override
             public void done(List<User> list, BmobException e) {
+                String managersName = "";
+                List<Employee> mlist = new ArrayList<>();
+                List<Employee> elist = new ArrayList<>();
                 employeeList.clear();
+
                 for (User u : list) {
                     if (u.getIsManager()) {
-                        employeeList.add(new Employee(u.getUsername(), R.drawable.m, u.getEmail(), u.getPhoto(), u.getMobilePhoneNumber()));
+                        Employee employee = new Employee(u.getUsername(), R.drawable.m, u.getEmail(), u.getPhoto(), u.getMobilePhoneNumber(), true, u.getAddress());
+                        employeeList.add(employee);
+                        mlist.add(employee);
                     }
                 }
                 for (User u : list) {
                     if (!u.getIsManager()) {
-                        employeeList.add(new Employee(u.getUsername(), R.drawable.e, u.getEmail(), u.getPhoto(), u.getMobilePhoneNumber()));
+                        Employee employee = new Employee(u.getUsername(), R.drawable.e, u.getEmail(), u.getPhoto(), u.getMobilePhoneNumber(), false, u.getAddress());
+                        employeeList.add(employee);
+                        elist.add(employee);
                     }
                 }
-                    adapter = new EmployeeAdapter(employeeList);
+                adapter = new EmployeeAdapter(employeeList, mlist, elist);
                     recyclerView.setAdapter(adapter);
 
             }

@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onNext(BmobUser bmobUser) {
-                Toast.makeText(getApplicationContext(), bmobUser.getUsername() + "登陆成功", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), bmobUser.getUsername() + " Login success", Toast.LENGTH_LONG).show();
                 new android.os.Handler().postDelayed(
                         new Runnable() {
                             public void run() {

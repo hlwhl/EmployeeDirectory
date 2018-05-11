@@ -92,11 +92,12 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="25dp"
+            android:layout_height="26dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="30dp"
-            android:textSize="20dp"
-            android:text="Friends" />
+            android:textSize="19dp"
+            android:text=""
+            android:id="@+id/friends" />
     </LinearLayout>
 
     <LinearLayout
@@ -180,12 +181,13 @@
             android:src="@drawable/nav_location" />
 
         <TextView
+            android:id="@+id/tv_loaction"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="30dp"
-            android:textSize="20dp"
-            android:text="Location" />
+            android:text="Location"
+            android:textSize="20dp" />
     </LinearLayout>
 
     <LinearLayout

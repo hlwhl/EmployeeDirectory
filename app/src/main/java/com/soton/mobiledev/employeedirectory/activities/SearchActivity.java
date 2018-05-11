@@ -62,12 +62,15 @@ public class SearchActivity extends AppCompatActivity {
         query.findObjects(new FindListener<User>() {
             @Override
             public void done(List<User> list, BmobException e) {
+
                     for (User u : list) {
                         if (u.getUsername().contains(search)) {
-                            resultList.add(new Employee(u.getUsername(), R.drawable.m, u.getEmail(), u.getPhoto(), u.getMobilePhoneNumber()));
+                            Employee employee = new Employee(u.getUsername(), R.drawable.m, u.getEmail(), u.getPhoto(), u.getMobilePhoneNumber(), u.getIsManager(), u.getDepartment());
+                            resultList.add(employee);
                         }
                     }
-                        adapter = new EmployeeAdapter(resultList);
+
+                adapter = new EmployeeAdapter(resultList);
                         recyclerView.setAdapter(adapter);
                 if (resultList.size() == 0) {
                     Toast.makeText(getApplicationContext(), "No Result", Toast.LENGTH_LONG).show();

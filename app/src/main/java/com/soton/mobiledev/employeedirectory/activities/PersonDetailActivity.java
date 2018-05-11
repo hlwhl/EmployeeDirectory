@@ -17,13 +17,29 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.soton.mobiledev.employeedirectory.R;
+import com.soton.mobiledev.employeedirectory.adapters.EmployeeAdapter;
 import com.soton.mobiledev.employeedirectory.entities.Employee;
+import com.soton.mobiledev.employeedirectory.entities.User;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
 public class PersonDetailActivity extends AppCompatActivity {
     Employee e;
-
+    private List<Employee> mlist;
+    private List<Employee> elist;
+    private TextView tvFriends;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mlist = new ArrayList<>();
+        elist = new ArrayList<>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_persondetail);
         //设置标题栏的返回按钮
@@ -40,11 +56,17 @@ public class PersonDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         e = (Employee) intent.getSerializableExtra("detail");
 
+
         actionBar.setTitle(e.getName() + "'s Detail Information");
         TextView tvUsername = (TextView) findViewById(R.id.username);
         TextView tvEmail = (TextView) findViewById(R.id.mail);
+        TextView tvLocation = (TextView) findViewById(R.id.tv_loaction);
+
         tvUsername.setText(e.getName());
         tvEmail.setText(e.getMail());
+        tvLocation.setText(e.getLocation());
+
+        query(e);
 
         //设置头像
         if (e.getPhoto() != null) {
@@ -60,6 +82,8 @@ public class PersonDetailActivity extends AppCompatActivity {
         tvMaill.setText("Mail: " + e.getMail());
         TextView tvSms = (TextView) findViewById(R.id.item_textviewsms);
         tvSms.setText("SMS: " + e.getPhonenum());
+        tvFriends = (TextView) findViewById(R.id.friends);
+
 
 
 
@@ -67,7 +91,26 @@ public class PersonDetailActivity extends AppCompatActivity {
         LinearLayout call=(LinearLayout) findViewById(R.id.item_call);
         LinearLayout sendMessage=(LinearLayout) findViewById(R.id.item_sms);
         LinearLayout sendMail=(LinearLayout) findViewById(R.id.item_mail);
+        LinearLayout f = (LinearLayout) findViewById(R.id.item_friends);
 
+
+        //朋友
+        f.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PersonDetailActivity.this, FriendsActivity.class);
+                if (mlist.isEmpty()) {
+                    Bundle b = new Bundle();
+                    b.putSerializable("list", (Serializable) elist);
+                    intent.putExtras(b);
+                } else {
+                    Bundle b = new Bundle();
+                    b.putSerializable("list", (Serializable) mlist);
+                    intent.putExtras(b);
+                }
+                startActivity(intent);
+            }
+        });
 
         //打电话
         call.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +132,7 @@ public class PersonDetailActivity extends AppCompatActivity {
         sendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + 12123456));
+                Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + e.getPhonenum()));
                 //intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
@@ -98,7 +141,7 @@ public class PersonDetailActivity extends AppCompatActivity {
         sendMail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + "123456@gmail.com"));
+                Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + e.getMail()));
                 //intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
@@ -109,7 +152,7 @@ public class PersonDetailActivity extends AppCompatActivity {
     private void call(String phonenum) {
         try {
             Intent intent = new Intent(Intent.ACTION_CALL);
-            intent.setData(Uri.parse("tel:12312456"));
+            intent.setData(Uri.parse("tel:" + phonenum));
             startActivity(intent);
         } catch (SecurityException e) {
             e.printStackTrace();
@@ -138,5 +181,36 @@ public class PersonDetailActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void query(final Employee e) {
+        //Toast.makeText(getApplicationContext(),search,Toast.LENGTH_LONG).show();
+        BmobQuery<User> query = new BmobQuery<User>();
+        //  query.addWhereEqualTo("username", search);
+        //先查所有的,在结果里根据名字判断
+        query.addWhereEqualTo("Department", e.getDepartment());
+        query.findObjects(new FindListener<User>() {
+            @Override
+            public void done(List<User> list, BmobException ex) {
+                for (User u : list) {
+                    if (e.getIsManager()) {
+                        if (!u.getIsManager()) {
+                            elist.add(new Employee(u.getUsername(), R.drawable.e, u.getEmail(), u.getPhoto(), u.getMobilePhoneNumber()));
+                        }
+                    } else if (!e.getIsManager()) {
+                        if (u.getIsManager()) {
+                            mlist.add(new Employee(u.getUsername(), R.drawable.m, u.getEmail(), u.getPhoto(), u.getMobilePhoneNumber()));
+                        }
+                    }
+                    //Toast.makeText(getApplicationContext(),elist.size()+" "+mlist.size(),Toast.LENGTH_LONG).show();
+                }
+                if (!e.getIsManager()) {
+                    tvFriends.setText("Managed by: " + mlist.get(0).getName() + " and....");
+                } else {
+                    tvFriends.setText("Manager of: " + elist.get(0).getName() + " and....");
+                }
+
+            }
+        });
     }
 }

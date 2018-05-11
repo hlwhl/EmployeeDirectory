@@ -12,6 +12,19 @@ public class Employee implements Serializable {
     private String mail;
     private BmobFile photo;
     private String phonenum;
+    private boolean isManager;
+    private String managersName;
+    private String Department;
+    private String location;
+
+    public Employee(String name, int id, String mail, BmobFile photo, String phonenum, boolean isManager) {
+        this.name = name;
+        this.id = id;
+        this.mail = mail;
+        this.photo = photo;
+        this.phonenum = phonenum;
+        this.isManager = isManager;
+    }
 
     public Employee(String name, int id, String mail, BmobFile photo, String phonenum) {
         this.name = name;
@@ -19,6 +32,34 @@ public class Employee implements Serializable {
         this.mail = mail;
         this.photo = photo;
         this.phonenum = phonenum;
+
+    }
+
+    public Employee(String name, int id, String mail, BmobFile photo, String phonenum, boolean isManager, String address) {
+        this.name = name;
+        this.id = id;
+        this.mail = mail;
+        this.photo = photo;
+        this.phonenum = phonenum;
+        this.isManager = isManager;
+        this.location = address;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+
+    public void setDepartment(String department) {
+        Department = department;
+    }
+
+    public String getDepartment() {
+        return Department;
     }
 
     public String getName() {
@@ -61,4 +102,15 @@ public class Employee implements Serializable {
         return phonenum;
     }
 
+    public boolean getIsManager() {
+        return isManager;
+    }
+
+    public void serManagersName(String managersname) {
+        this.managersName = managersName;
+    }
+
+    public String getManagersName() {
+        return this.managersName;
+    }
 }

@@ -12,13 +12,15 @@ import android.widget.ImageView;
 import com.soton.mobiledev.employeedirectory.R;
 import com.soton.mobiledev.employeedirectory.activities.PersonDetailActivity;
 import com.soton.mobiledev.employeedirectory.entities.Employee;
+import com.soton.mobiledev.employeedirectory.entities.User;
 
 import java.io.Serializable;
 import java.util.List;
 
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHolder> {
     private List<Employee> mEmployeeList;
-
+    private List<Employee> mlist;
+    private List<Employee> elist;
     static class ViewHolder extends RecyclerView.ViewHolder{
         View employeeView;
         ImageView employeeImage;
@@ -26,13 +28,19 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
         public ViewHolder(View view){
             super(view);
             employeeView=view;
-            employeeImage= (ImageView)view.findViewById(R.id.employee_image);
-            employeeName=(TextView)view.findViewById(R.id.employee_name);
+            employeeImage = view.findViewById(R.id.employee_image);
+            employeeName = view.findViewById(R.id.employee_name);
         }
     }
      public EmployeeAdapter(List<Employee> EmployeeList){
          mEmployeeList=EmployeeList;
      }
+
+    public EmployeeAdapter(List<Employee> EmployeeList, List<Employee> mlist, List<Employee> elist) {
+        mEmployeeList = EmployeeList;
+        this.mlist = mlist;
+        this.elist = elist;
+    }
     @Override
     public ViewHolder onCreateViewHolder(final ViewGroup parent, int ViewType){
          View view=LayoutInflater.from(parent.getContext()).inflate(R.layout.employee_item,parent,false);
@@ -42,10 +50,19 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
                 Employee employee = mEmployeeList.get(position);
-                Intent intent = new Intent(parent.getContext(), PersonDetailActivity.class);
-                //intent传递数据
-                intent.putExtra("detail", (Serializable) employee);
-                parent.getContext().startActivity(intent);
+                if (!employee.getIsManager()) {
+                    Intent intent = new Intent(parent.getContext(), PersonDetailActivity.class);
+                    //intent传递数据
+                    intent.putExtra("detail", employee);
+                    intent.putExtra("managed by", (Serializable) mlist);
+                    parent.getContext().startActivity(intent);
+                } else {
+                    Intent intent = new Intent(parent.getContext(), PersonDetailActivity.class);
+                    //intent传递数据
+                    intent.putExtra("detail", employee);
+                    intent.putExtra("manager of", (Serializable) elist);
+                    parent.getContext().startActivity(intent);
+                }
             }
         });
 

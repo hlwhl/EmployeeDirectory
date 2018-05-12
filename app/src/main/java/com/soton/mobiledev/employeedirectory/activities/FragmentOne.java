@@ -69,14 +69,14 @@ public class FragmentOne extends Fragment{
 
                 for (User u : list) {
                     if (u.getIsManager()) {
-                        Employee employee = new Employee(u.getUsername(), R.drawable.m, u.getEmail(), u.getPhoto(), u.getMobilePhoneNumber(), true, u.getAddress());
+                        Employee employee = new Employee(u.getUsername(), R.drawable.m, u.getEmail(), u.getPhoto(), u.getPhonenum(), true, u.getAddress());
                         employeeList.add(employee);
                         mlist.add(employee);
                     }
                 }
                 for (User u : list) {
                     if (!u.getIsManager()) {
-                        Employee employee = new Employee(u.getUsername(), R.drawable.e, u.getEmail(), u.getPhoto(), u.getMobilePhoneNumber(), false, u.getAddress());
+                        Employee employee = new Employee(u.getUsername(), R.drawable.e, u.getEmail(), u.getPhoto(), u.getPhonenum(), false, u.getAddress());
                         employeeList.add(employee);
                         elist.add(employee);
                     }

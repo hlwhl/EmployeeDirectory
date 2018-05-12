@@ -65,7 +65,7 @@ public class SearchActivity extends AppCompatActivity {
 
                     for (User u : list) {
                         if (u.getUsername().contains(search)) {
-                            Employee employee = new Employee(u.getUsername(), R.drawable.m, u.getEmail(), u.getPhoto(), u.getMobilePhoneNumber(), u.getIsManager(), u.getDepartment());
+                            Employee employee = new Employee(u.getUsername(), R.drawable.m, u.getEmail(), u.getPhoto(), u.getPhonenum(), u.getIsManager(), u.getAddress());
                             resultList.add(employee);
                         }
                     }

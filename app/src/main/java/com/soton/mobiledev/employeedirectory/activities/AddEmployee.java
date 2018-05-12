@@ -63,6 +63,7 @@ public class AddEmployee extends AppCompatActivity {
     private EditText etPassword;
     private EditText etEmail;
     private EditText etAddress;
+    private EditText etPhonenum;
     private RadioGroup rgRole;
     private RadioGroup rgDepartment;
     private AppCompatButton add;
@@ -95,6 +96,7 @@ public class AddEmployee extends AppCompatActivity {
                     newUser.setPassword(etPassword.getText().toString());
                     newUser.setEmail(etEmail.getText().toString());
                     newUser.setAddress(etAddress.getText().toString());
+                    newUser.setPhonenum(etPhonenum.getText().toString());
                     //处理照片上传
                     final BmobFile photo = new BmobFile(new File(imagePath));
                     photo.uploadblock(new UploadFileListener() {
@@ -157,7 +159,7 @@ public class AddEmployee extends AppCompatActivity {
 
 
     private boolean isnull() {
-        return (etUsername.length() == 0) || (etPassword.length() == 0) || (etAddress.length() == 0) || (etEmail.length() == 0) || rgRole.getCheckedRadioButtonId() == -1 || rgDepartment.getCheckedRadioButtonId() == -1 || imagePath == null;
+        return (etPhonenum.length() == 0) || (etUsername.length() == 0) || (etPassword.length() == 0) || (etAddress.length() == 0) || (etEmail.length() == 0) || rgRole.getCheckedRadioButtonId() == -1 || rgDepartment.getCheckedRadioButtonId() == -1 || imagePath == null;
     }
 
     private void openAlbum() {
@@ -254,7 +256,7 @@ public class AddEmployee extends AppCompatActivity {
         etAddress = (EditText) findViewById(R.id.input_location);
         rgRole = (RadioGroup) findViewById(R.id.rgRole);
         rgDepartment = (RadioGroup) findViewById(R.id.rgDepartment);
-
+        etPhonenum = (EditText) findViewById(R.id.input_phonenum);
     }
 
 }

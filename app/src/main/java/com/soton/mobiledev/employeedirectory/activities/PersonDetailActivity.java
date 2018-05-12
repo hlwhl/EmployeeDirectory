@@ -60,11 +60,11 @@ public class PersonDetailActivity extends AppCompatActivity {
         actionBar.setTitle(e.getName() + "'s Detail Information");
         TextView tvUsername = (TextView) findViewById(R.id.username);
         TextView tvEmail = (TextView) findViewById(R.id.mail);
-        TextView tvLocation = (TextView) findViewById(R.id.tv_loaction);
+
 
         tvUsername.setText(e.getName());
         tvEmail.setText(e.getMail());
-        tvLocation.setText(e.getLocation());
+
 
         query(e);
 
@@ -83,7 +83,8 @@ public class PersonDetailActivity extends AppCompatActivity {
         TextView tvSms = (TextView) findViewById(R.id.item_textviewsms);
         tvSms.setText("SMS: " + e.getPhonenum());
         tvFriends = (TextView) findViewById(R.id.friends);
-
+        TextView tvLocation = (TextView) findViewById(R.id.tv_loaction);
+        tvLocation.setText(e.getLocation());
 
 
 
@@ -195,11 +196,11 @@ public class PersonDetailActivity extends AppCompatActivity {
                 for (User u : list) {
                     if (e.getIsManager()) {
                         if (!u.getIsManager()) {
-                            elist.add(new Employee(u.getUsername(), R.drawable.e, u.getEmail(), u.getPhoto(), u.getMobilePhoneNumber()));
+                            elist.add(new Employee(u.getUsername(), R.drawable.e, u.getEmail(), u.getPhoto(), u.getPhonenum()));
                         }
                     } else if (!e.getIsManager()) {
                         if (u.getIsManager()) {
-                            mlist.add(new Employee(u.getUsername(), R.drawable.m, u.getEmail(), u.getPhoto(), u.getMobilePhoneNumber()));
+                            mlist.add(new Employee(u.getUsername(), R.drawable.m, u.getEmail(), u.getPhoto(), u.getPhonenum()));
                         }
                     }
                     //Toast.makeText(getApplicationContext(),elist.size()+" "+mlist.size(),Toast.LENGTH_LONG).show();
@@ -209,7 +210,6 @@ public class PersonDetailActivity extends AppCompatActivity {
                 } else {
                     tvFriends.setText("Manager of: " + elist.get(0).getName() + " and....");
                 }
-
             }
         });
     }

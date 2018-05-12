@@ -9,6 +9,15 @@ public class User extends BmobUser {
     private Boolean isManager;
     private String address;
     private String Department;
+    private String phonenum;
+
+    public void setPhonenum(String phonenum) {
+        this.phonenum = phonenum;
+    }
+
+    public String getPhonenum() {
+        return phonenum;
+    }
 
     public void setPhoto(BmobFile photo) {
         Photo = photo;

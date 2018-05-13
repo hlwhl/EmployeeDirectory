@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
 
     <android.support.design.widget.AppBarLayout
@@ -16,7 +16,7 @@
         <com.mancj.materialsearchbar.MaterialSearchBar
             style="@style/MaterialSearchBarLight"
             android:id="@+id/searchBar"
-            app:mt_navIconEnabled="false"
+            app:mt_navIconEnabled="true"
             app:mt_placeholder="Search"
             app:mt_hint="Employee/Manager name"
             android:layout_width="match_parent"

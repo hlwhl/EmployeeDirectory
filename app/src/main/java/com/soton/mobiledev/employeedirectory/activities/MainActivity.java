@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         iv_user = (ImageView) findViewById(R.id.bgimagemainuser);
         searchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
         searchBar.setOnSearchActionListener(this);
-
+        searchBar.inflateMenu(R.menu.main);
     }
 
 }

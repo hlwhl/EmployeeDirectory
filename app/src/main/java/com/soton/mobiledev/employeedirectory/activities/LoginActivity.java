@@ -2,6 +2,7 @@ package com.soton.mobiledev.employeedirectory.activities;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -17,6 +18,8 @@ import com.soton.mobiledev.employeedirectory.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 import rx.Subscriber;
 
 public class LoginActivity extends AppCompatActivity {
@@ -73,40 +76,19 @@ public class LoginActivity extends AppCompatActivity {
         BmobUser u = new BmobUser();
         u.setUsername(username);
         u.setPassword(password);
-        u.loginObservable(BmobUser.class).subscribe(new Subscriber<BmobUser>() {
+        u.login(new SaveListener<BmobUser>() {
             @Override
-            public void onCompleted() {
-                Log.e("66", "----onCompleted----");
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG);
-            }
-
-            @Override
-            public void onNext(BmobUser bmobUser) {
-                Toast.makeText(getApplicationContext(), bmobUser.getUsername() + " Login success", Toast.LENGTH_LONG).show();
-                new android.os.Handler().postDelayed(
-                        new Runnable() {
-                            public void run() {
-                                // On complete call either onLoginSuccess or onLoginFailed
-                                onLoginSuccess();
-                                // onLoginFailed();
-                                progressDialog.dismiss();
-                            }
-                        }, 3000);
+            public void done(BmobUser bmobUser, BmobException e) {
+                if (e == null) {
+                    onLoginSuccess();
+                    progressDialog.dismiss();
+                } else {
+                    progressDialog.dismiss();
+                    Snackbar.make(getCurrentFocus(), e.getMessage(), Snackbar.LENGTH_LONG).show();
+                    _loginButton.setEnabled(true);
+                }
             }
         });
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        //onLoginFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
 
     }
 

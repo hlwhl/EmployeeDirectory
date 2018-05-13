@@ -49,7 +49,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentList.add(new FragmentTwo());
         fragmentList.add(new FragmentThree());
         initView();
-
+        //如果是雇员，就隐藏添加按钮
+        boolean isManager=(boolean)User.getObjectByKey("isManager");
+        if(isManager==false){
+            addButton.setVisibility(View.INVISIBLE);
+        }
         JSONObject photoFile = (JSONObject) User.getObjectByKey("Photo");
         String photoUrl = null;
         try {
@@ -61,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         MyPager.setAdapter(new MyViewPagerAdapter(getSupportFragmentManager(),fragmentList));
         mTab.setupWithViewPager(MyPager);
-        addButton = (FloatingActionButton) findViewById(R.id.add_employee);
+        if(isManager==true) {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Toast.makeText(getApplicationContext(), "No Result", Toast.LENGTH_LONG).show();
             }
         });
+       }
     }
 
     @Override
@@ -126,7 +131,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         iv_user = (ImageView) findViewById(R.id.bgimagemainuser);
         searchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
         searchBar.setOnSearchActionListener(this);
+<<<<<<< HEAD
         searchBar.inflateMenu(R.menu.main);
+=======
+        addButton = (FloatingActionButton) findViewById(R.id.add_employee);
+>>>>>>> 159f6959f39852cda1bff406702f0c4e38340e6a
     }
 
 }

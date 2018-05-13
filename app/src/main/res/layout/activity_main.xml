@@ -1,100 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MainActivity">
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
 
-
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        tools:context=".activities.MainActivity">
 
-        <com.mancj.materialsearchbar.MaterialSearchBar
-            style="@style/MaterialSearchBarLight"
-            android:id="@+id/searchBar"
-            app:mt_navIconEnabled="true"
-            app:mt_placeholder="Search"
-            app:mt_hint="Employee/Manager name"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="8dp"
-            app:layout_scrollFlags="scroll|enterAlways" />
 
         <android.support.design.widget.AppBarLayout
-            android:id="@+id/imageAppbar"
+            android:id="@+id/appbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways">
+            android:layout_height="wrap_content">
 
-            <RelativeLayout
+
+            <com.mancj.materialsearchbar.MaterialSearchBar
+                android:id="@+id/searchBar"
+                style="@style/MaterialSearchBarLight"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:mt_hint="Employee/Manager name"
+                app:mt_navIconEnabled="true"
+                app:mt_placeholder="Search" />
 
-                <ImageView
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/imageAppbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|enterAlways">
+
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:id="@+id/bgimagemainuser"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitXY"
-                    app:layout_scrollFlags="scroll|enterAlways" />
-                />
+                    android:layout_height="wrap_content">
 
-                <android.support.design.widget.FloatingActionButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginBottom="13dp"
-                    android:id="@+id/add_employee"
-                    android:src="@android:drawable/ic_input_add"
-                    android:tint="@color/colorPrimary"
-                    android:backgroundTint="@color/white" />
-            </RelativeLayout>
+                    <ImageView
+                        android:id="@+id/bgimagemainuser"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        app:layout_scrollFlags="scroll|enterAlways" />
+                    />
 
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/add_employee"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginBottom="13dp"
+                        android:backgroundTint="@color/white"
+                        android:src="@android:drawable/ic_input_add"
+                        android:tint="@color/colorPrimary" />
+                </RelativeLayout>
+
+
+            </android.support.design.widget.AppBarLayout>
+
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabIndicatorColor="@color/colorAccent"
+                app:tabIndicatorHeight="2dp"
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="@color/colorAccent"></android.support.design.widget.TabLayout>
 
         </android.support.design.widget.AppBarLayout>
 
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tab"
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabIndicatorColor="@color/colorAccent"
-            app:tabIndicatorHeight="2dp"
-            app:tabMode="fixed"
-            app:tabSelectedTextColor="@color/colorAccent"></android.support.design.widget.TabLayout>
+            android:layout_height="match_parent"
+            android:layout_gravity="fill_vertical"
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    </android.support.design.widget.AppBarLayout>
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"></android.support.v4.view.ViewPager>
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/container"
-        android:layout_width="match_parent"
+        </android.support.v4.widget.NestedScrollView>
+
+        <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/floatingActionButton"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="0dp"-->
+        <!--android:src="@android:drawable/ic_menu_edit"-->
+        <!--app:layout_anchor="@id/imageAppbar">-->
+
+        <!--</android.support.design.widget.FloatingActionButton>-->
+    </android.support.design.widget.CoordinatorLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:layout_gravity="fill_vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_main"
+        app:menu="@menu/activity_main_drawer" />
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-        </android.support.v4.view.ViewPager>
-
-    </android.support.v4.widget.NestedScrollView>
-
-    <!--<android.support.design.widget.FloatingActionButton-->
-    <!--android:id="@+id/floatingActionButton"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_margin="0dp"-->
-    <!--android:src="@android:drawable/ic_menu_edit"-->
-    <!--app:layout_anchor="@id/imageAppbar">-->
-
-    <!--</android.support.design.widget.FloatingActionButton>-->
-</android.support.design.widget.CoordinatorLayout>
+</android.support.v4.widget.DrawerLayout>

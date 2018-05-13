@@ -43,7 +43,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.SearchActivity" />
         <activity android:name=".activities.FriendsActivity" />
-        <activity android:name=".activities.AddEmployee"></activity>
+        <activity android:name=".activities.AddEmployee" />
+        <activity android:name=".activities.AboutActivity"></activity>
     </application>
 
 </manifest>

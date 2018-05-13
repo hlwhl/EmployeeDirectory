@@ -5,16 +5,20 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -37,8 +41,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private List<Fragment> fragmentList;
     private TabLayout mTab;
     private ImageView iv_user;
+    private DrawerLayout drawerLayout;
     MaterialSearchBar searchBar;
     FloatingActionButton addButton;
+    ImageView imageViewSide;
+    TextView sideUsername;
+    String photoUrl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,20 +57,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentList.add(new FragmentTwo());
         fragmentList.add(new FragmentThree());
         initView();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+
+
         //如果是雇员，就隐藏添加按钮
         boolean isManager=(boolean)User.getObjectByKey("isManager");
         if(isManager==false){
             addButton.setVisibility(View.INVISIBLE);
         }
         JSONObject photoFile = (JSONObject) User.getObjectByKey("Photo");
-        String photoUrl = null;
+        photoUrl = null;
         try {
             photoUrl = photoFile.getString("url");
         } catch (JSONException e) {
             e.printStackTrace();
         }
         Glide.with(getApplicationContext()).load(photoUrl).into(iv_user);
-
         MyPager.setAdapter(new MyViewPagerAdapter(getSupportFragmentManager(),fragmentList));
         mTab.setupWithViewPager(MyPager);
         if(isManager==true) {
@@ -77,9 +90,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
        }
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return false;
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_camera) {
+            BmobUser.logOut();
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        } else if (id == R.id.nav_gallery) {
+            startActivity(new Intent(MainActivity.this, AboutActivity.class));
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     @Override
@@ -96,7 +122,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onButtonClicked(int buttonCode) {
-
+        switch (buttonCode) {
+            case MaterialSearchBar.BUTTON_NAVIGATION:
+                drawerLayout.openDrawer(Gravity.LEFT);
+                break;
+        }
     }
 
 
@@ -131,11 +161,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         iv_user = (ImageView) findViewById(R.id.bgimagemainuser);
         searchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
         searchBar.setOnSearchActionListener(this);
-<<<<<<< HEAD
-        searchBar.inflateMenu(R.menu.main);
-=======
         addButton = (FloatingActionButton) findViewById(R.id.add_employee);
->>>>>>> 159f6959f39852cda1bff406702f0c4e38340e6a
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                sideUsername = (TextView) findViewById(R.id.userNameSideMenu);
+                sideUsername.setText(User.getCurrentUser().getUsername());
+                imageViewSide = (ImageView) findViewById(R.id.imageViewSideMenu);
+                Glide.with(getApplicationContext()).load(photoUrl).into(imageViewSide);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+
     }
 
 }

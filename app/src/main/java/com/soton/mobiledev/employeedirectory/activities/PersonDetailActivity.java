@@ -36,6 +36,7 @@ public class PersonDetailActivity extends AppCompatActivity {
     private List<Employee> mlist;
     private List<Employee> elist;
     private TextView tvFriends;
+    private boolean allowClick;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mlist = new ArrayList<>();
@@ -55,8 +56,9 @@ public class PersonDetailActivity extends AppCompatActivity {
         //接收intent传来数据
         Intent intent = getIntent();
         e = (Employee) intent.getSerializableExtra("detail");
-
-
+        //Toast.makeText(getApplicationContext(), e.getDepartment(), Toast.LENGTH_LONG).show();
+        allowClick=true;
+        allowClick = (Boolean) intent.getSerializableExtra("allowClick");
         actionBar.setTitle(e.getName() + "'s Detail Information");
         TextView tvUsername = (TextView) findViewById(R.id.username);
         TextView tvEmail = (TextView) findViewById(R.id.mail);
@@ -67,7 +69,7 @@ public class PersonDetailActivity extends AppCompatActivity {
 
 
         query(e);
-
+       // Toast.makeText(getApplicationContext(), e.getDepartment(), Toast.LENGTH_LONG).show();
         //设置头像
         if (e.getPhoto() != null) {
             //头像为空
@@ -96,22 +98,24 @@ public class PersonDetailActivity extends AppCompatActivity {
 
 
         //朋友
-        f.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(PersonDetailActivity.this, FriendsActivity.class);
-                if (mlist.isEmpty()) {
-                    Bundle b = new Bundle();
-                    b.putSerializable("list", (Serializable) elist);
-                    intent.putExtras(b);
-                } else {
-                    Bundle b = new Bundle();
-                    b.putSerializable("list", (Serializable) mlist);
-                    intent.putExtras(b);
+        if(allowClick) {
+            f.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(PersonDetailActivity.this, FriendsActivity.class);
+                    if (mlist.isEmpty()) {
+                        Bundle b = new Bundle();
+                        b.putSerializable("list", (Serializable) elist);
+                        intent.putExtras(b);
+                    } else {
+                        Bundle b = new Bundle();
+                        b.putSerializable("list", (Serializable) mlist);
+                        intent.putExtras(b);
+                    }
+                    startActivity(intent);
                 }
-                startActivity(intent);
-            }
-        });
+            });
+        }
 
         //打电话
         call.setOnClickListener(new View.OnClickListener() {
@@ -186,6 +190,8 @@ public class PersonDetailActivity extends AppCompatActivity {
 
     private void query(final Employee e) {
         //Toast.makeText(getApplicationContext(),search,Toast.LENGTH_LONG).show();
+        elist.clear();
+        mlist.clear();
         BmobQuery<User> query = new BmobQuery<User>();
         //  query.addWhereEqualTo("username", search);
         //先查所有的,在结果里根据名字判断
@@ -196,21 +202,27 @@ public class PersonDetailActivity extends AppCompatActivity {
                 for (User u : list) {
                     if (e.getIsManager()) {
                         if (!u.getIsManager()) {
-                            elist.add(new Employee(u.getUsername(), R.drawable.e, u.getEmail(), u.getPhoto(), u.getPhonenum()));
+                            //elist.clear();
+                            elist.add(new Employee(u.getUsername(), R.drawable.e, u.getEmail(), u.getPhoto(), u.getPhonenum(), false, u.getAddress(),u.getDepartment()));
                         }
                     } else if (!e.getIsManager()) {
                         if (u.getIsManager()) {
-                            mlist.add(new Employee(u.getUsername(), R.drawable.m, u.getEmail(), u.getPhoto(), u.getPhonenum()));
+                           // mlist.clear();
+                            mlist.add(new Employee(u.getUsername(), R.drawable.m, u.getEmail(), u.getPhoto(), u.getPhonenum(), true, u.getAddress(),u.getDepartment()));
                         }
                     }
                     //Toast.makeText(getApplicationContext(),elist.size()+" "+mlist.size(),Toast.LENGTH_LONG).show();
                 }
                 if (!e.getIsManager()) {
                     tvFriends.setText("Managed by: " + mlist.get(0).getName() + " and....");
+                 //   Toast.makeText(getApplicationContext(),e.getIsManager()+","+e.getName(),Toast.LENGTH_LONG).show();
                 } else {
                     tvFriends.setText("Manager of: " + elist.get(0).getName() + " and....");
+                    //Toast.makeText(getApplicationContext(),e.getIsManager()+","+e.getName(),Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
+
+
 }

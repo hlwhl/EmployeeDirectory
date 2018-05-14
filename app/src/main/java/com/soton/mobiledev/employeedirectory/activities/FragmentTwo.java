@@ -62,14 +62,14 @@ public class FragmentTwo extends Fragment {
 
                 for (User u : list) {
                     if (u.getIsManager()) {
-                        Employee employee = new Employee(u.getUsername(), R.drawable.m, u.getEmail(), u.getPhoto(), u.getPhonenum(), true, u.getAddress());
+                        Employee employee = new Employee(u.getUsername(), R.drawable.m, u.getEmail(), u.getPhoto(), u.getPhonenum(), true, u.getAddress(),u.getDepartment());
                         employeeList.add(employee);
                         mlist.add(employee);
                     }
                 }
                 for (User u : list) {
                     if (!u.getIsManager()) {
-                        Employee employee = new Employee(u.getUsername(), R.drawable.e, u.getEmail(), u.getPhoto(), u.getPhonenum(), false, u.getAddress());
+                        Employee employee = new Employee(u.getUsername(), R.drawable.e, u.getEmail(), u.getPhoto(), u.getPhonenum(), false, u.getAddress(),u.getDepartment());
                         employeeList.add(employee);
                         elist.add(employee);
                     }

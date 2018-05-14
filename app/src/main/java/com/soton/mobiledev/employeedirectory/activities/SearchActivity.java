@@ -64,9 +64,14 @@ public class SearchActivity extends AppCompatActivity {
             public void done(List<User> list, BmobException e) {
 
                     for (User u : list) {
-                        if (u.getUsername().contains(search)) {
-                            Employee employee = new Employee(u.getUsername(), R.drawable.m, u.getEmail(), u.getPhoto(), u.getPhonenum(), u.getIsManager(), u.getAddress());
-                            resultList.add(employee);
+                        if (u.getUsername().toLowerCase().contains(search.toLowerCase())) {
+                            if(u.getIsManager()) {
+                                Employee employee = new Employee(u.getUsername(), R.drawable.m, u.getEmail(), u.getPhoto(), u.getPhonenum(), u.getIsManager(), u.getAddress(), u.getDepartment());
+                                resultList.add(employee);
+                            }else{
+                                Employee employee = new Employee(u.getUsername(), R.drawable.e, u.getEmail(), u.getPhoto(), u.getPhonenum(), u.getIsManager(), u.getAddress(), u.getDepartment());
+                                resultList.add(employee);
+                            }
                         }
                     }
 

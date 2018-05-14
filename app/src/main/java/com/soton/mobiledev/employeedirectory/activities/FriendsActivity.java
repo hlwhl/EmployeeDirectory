@@ -50,7 +50,7 @@ public class FriendsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         //adapter=new EmployeeAdapter(resultList);
         //recyclerView.setAdapter(adapter);
-        adapter = new EmployeeAdapter(list);
+        adapter = new EmployeeAdapter(list,false);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
     }

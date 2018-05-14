@@ -45,6 +45,17 @@ public class Employee implements Serializable {
         this.location = address;
     }
 
+    public Employee(String name, int id, String mail, BmobFile photo, String phonenum, boolean isManager, String address,String department) {
+        this.name = name;
+        this.id = id;
+        this.mail = mail;
+        this.photo = photo;
+        this.phonenum = phonenum;
+        this.isManager = isManager;
+        this.location = address;
+        this.Department=department;
+    }
+
     public void setLocation(String location) {
         this.location = location;
     }

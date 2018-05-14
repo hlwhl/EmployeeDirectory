@@ -33,7 +33,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
             employeeName = view.findViewById(R.id.employee_name);
         }
     }
-     public EmployeeAdapter(List<Employee> EmployeeList){
+    public EmployeeAdapter(List<Employee> EmployeeList){
          mEmployeeList=EmployeeList;
      }
     public EmployeeAdapter(List<Employee> EmployeeList,boolean flag){

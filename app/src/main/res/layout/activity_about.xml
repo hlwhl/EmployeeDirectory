@@ -6,7 +6,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:src="@drawable/logo"
+        android:src="@drawable/splashlogo"
         android:layout_gravity="center" />
 
     <TextView
@@ -15,7 +15,7 @@
         android:text="Version 1.0"
         android:textColor="@android:color/background_light"
         android:layout_gravity="center"
-        android:layout_marginTop="80dp"/>
+        android:layout_marginTop="110dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -23,7 +23,7 @@
         android:text="Coursework for Mobile Application Development"
         android:textColor="@android:color/background_light"
         android:layout_gravity="center"
-        android:layout_marginTop="110dp"/>
+        android:layout_marginTop="140dp"/>
     <TextView
         android:id="@+id/tvAuthor"
         android:layout_width="wrap_content"
@@ -31,5 +31,5 @@
         android:text=""
         android:textColor="@android:color/background_light"
         android:layout_gravity="center"
-        android:layout_marginTop="140dp"/>
+        android:layout_marginTop="150dp"/>
 </FrameLayout>

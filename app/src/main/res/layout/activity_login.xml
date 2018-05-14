@@ -21,7 +21,7 @@
             android:layout_marginBottom="24dp"
             android:tint="	#9370DB"
             android:scaleType="centerCrop"
-            android:src="@drawable/logo" />
+            android:src="@drawable/loginlogo" />
 
         <!--  Username Label -->
         <android.support.design.widget.TextInputLayout

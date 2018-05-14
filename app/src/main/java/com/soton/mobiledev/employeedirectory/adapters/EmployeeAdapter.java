@@ -21,6 +21,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
     private List<Employee> mEmployeeList;
     private List<Employee> mlist;
     private List<Employee> elist;
+    private boolean flag=true;
     static class ViewHolder extends RecyclerView.ViewHolder{
         View employeeView;
         ImageView employeeImage;
@@ -35,7 +36,10 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
      public EmployeeAdapter(List<Employee> EmployeeList){
          mEmployeeList=EmployeeList;
      }
-
+    public EmployeeAdapter(List<Employee> EmployeeList,boolean flag){
+        mEmployeeList=EmployeeList;
+        this.flag=flag;
+    }
     public EmployeeAdapter(List<Employee> EmployeeList, List<Employee> mlist, List<Employee> elist) {
         mEmployeeList = EmployeeList;
         this.mlist = mlist;
@@ -54,13 +58,14 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
                     Intent intent = new Intent(parent.getContext(), PersonDetailActivity.class);
                     //intent传递数据
                     intent.putExtra("detail", employee);
-                    intent.putExtra("managed by", (Serializable) mlist);
+                    intent.putExtra("allowClick",flag);
                     parent.getContext().startActivity(intent);
                 } else {
                     Intent intent = new Intent(parent.getContext(), PersonDetailActivity.class);
                     //intent传递数据
                     intent.putExtra("detail", employee);
-                    intent.putExtra("manager of", (Serializable) elist);
+                    intent.putExtra("allowClick",flag);
+                  //  intent.putExtra("manager of", (Serializable) elist);
                     parent.getContext().startActivity(intent);
                 }
             }
